@@ -157,7 +157,7 @@ function renderListaLavoratori() {
                 <div>
                     <div class="font-bold text-slate-800 text-sm">${lav.nome}</div>
                     <div class="flex gap-1.5 mt-1">
-                        ${lav.contratto ? '<span class="text-[9px] font-bold bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded uppercase">Fisso</span>' : ''}
+                        ${lav.contratto ? '<span class="text-[9px] font-bold bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded uppercase">Contratto</span>' : ''}
                         ${lav.macchina ? '<span class="text-[9px] font-bold bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded uppercase">Auto</span>' : ''}
                     </div>
                 </div>
@@ -197,7 +197,7 @@ function renderGrigliaDisponibilita() {
         return `
         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3">
             <div class="flex justify-between items-center">
-                <div class="font-bold text-slate-800 text-sm">${lav.nome} ${lav.contratto ? '<span class="ml-1 text-[8px] bg-blue-50 text-blue-500 px-1 py-0.5 rounded uppercase align-middle">Fisso</span>' : ''}</div>
+                <div class="font-bold text-slate-800 text-sm">${lav.nome} ${lav.contratto ? '<span class="ml-1 text-[8px] bg-blue-50 text-blue-500 px-1 py-0.5 rounded uppercase align-middle">Contratto</span>' : ''}</div>
                 <button onclick="toggleTuttiGiorni(${lav.id})" class="text-[9px] uppercase font-bold px-2.5 py-1.5 rounded-lg transition-colors ${allSelected ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-500'}">
                     ${allSelected ? 'Deseleziona' : 'Tutti i gg'}
                 </button>
@@ -220,7 +220,7 @@ function renderGrigliaDisponibilita() {
 
         let allCell = `<td onclick="toggleTuttiGiorni(${lav.id})" class="p-0 border-b border-l border-slate-100 cursor-pointer transition-all hover:bg-slate-50 text-center min-w-[5rem]"><div class="w-full h-14 flex items-center justify-center text-[10px] uppercase font-bold tracking-widest ${allSelected ? 'text-blue-600' : 'text-slate-400'}">${allSelected ? 'Nessuno' : 'Tutti'}</div></td>`;
 
-        return `<tr class="group hover:bg-slate-50/50 transition-all"><td class="p-4 border-b border-slate-100"><div class="font-bold text-slate-800 text-sm whitespace-nowrap">${lav.nome} ${lav.contratto ? '<span class="ml-1 text-[8px] bg-blue-50 text-blue-500 px-1 py-0.5 rounded border border-blue-100 uppercase">Fisso</span>' : ''}</div></td>${dayCells}${allCell}</tr>`;
+        return `<tr class="group hover:bg-slate-50/50 transition-all"><td class="p-4 border-b border-slate-100"><div class="font-bold text-slate-800 text-sm whitespace-nowrap">${lav.nome} ${lav.contratto ? '<span class="ml-1 text-[8px] bg-blue-50 text-blue-500 px-1 py-0.5 rounded border border-blue-100 uppercase">Contratto</span>' : ''}</div></td>${dayCells}${allCell}</tr>`;
     }).join('');
 
     let tableHtml = `<table class="w-full text-left border-collapse min-w-max"><thead><tr class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-widest"><th class="p-4 border-b">Risorsa</th>${giorniSettimana.map(g => `<th class="p-4 border-b text-center border-l border-slate-100 w-16">${g}</th>`).join('')}<th class="p-4 border-b text-center border-l border-slate-100 w-20 bg-slate-100/50">SELEZ.</th></tr></thead><tbody class="divide-y divide-slate-100">${tableRows}</tbody></table>`;

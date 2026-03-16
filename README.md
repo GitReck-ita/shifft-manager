@@ -9,7 +9,7 @@
     * **Mobile View:** Transforms into a touch-friendly, card-and-pill-based interface with a sticky bottom action bar.
 * **👥 Advanced Worker Management:**
     * Add, edit, and remove employees.
-    * Tag workers with specific attributes: **Contratto Fisso** (Fixed Contract - prioritized for shifts) and **Auto** (Car Available - prioritized for weekend shifts).
+    * Tag workers with specific attributes: **Contratto** (Contract - prioritized for shifts) and **Auto** (Car Available - prioritized for weekend shifts).
 * **🧠 Smart Auto-Scheduling Algorithm:**
     * Automatically calculates the optimal weekly shift layout based on daily requirements.
     * Prioritizes contract workers and evenly distributes remaining shifts among available staff to ensure fairness.
@@ -89,14 +89,14 @@ const DEFAULT_CONFIG = {
 
 
 * **`disponibilitaCorrente` (Availability Matrix):** Tracks which days each worker is available. By default, it is empty (`{}`), meaning everyone's availability starts cleared. To pre-fill availability, use the worker's `id` as the key and an array of days as the value (e.g., `1: ["Lun", "Mar"]`).
-* **`toggles` (UI Memory):** Tells the app what position the "Contratto Fisso" and "Auto" switches should be in when the "Nuova Risorsa" form first loads. Leaving them `false` ensures the form starts clean.
+* **`toggles` (UI Memory):** Tells the app what position the "Contratto" and "Auto" switches should be in when the "Nuova Risorsa" form first loads. Leaving them `false` ensures the form starts clean.
 
 ## 🧮 How the Algorithm Works
 
 When you click **"CALCOLA TURNI"**, the app runs 1,000 rapid simulations to find the most balanced schedule. For each day, it:
 
 1. Filters out anyone who isn't marked as "available".
-2. Assigns workers with a **"Contratto Fisso"** first.
+2. Assigns workers with a **"Contratto"** first.
 3. For weekends (Saturday/Sunday), it prioritizes workers with an **"Auto"** (Car).
 4. Fills the remaining required slots by prioritizing workers who currently have the *fewest* total shifts assigned that week.
 5. Scores the generated schedule based on fairness and coverage, outputting the best result.
