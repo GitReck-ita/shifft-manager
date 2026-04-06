@@ -275,9 +275,11 @@ function calcolaSingolaSoluzione() {
         shuffleArray(disp);
 
         let disponibiliConContratto = disp.filter(l => l.contratto);
-        if (disponibiliConContratto.length > 0 && max > 0) {
+        const minimoContratti = (g === "Sab" || g === "Dom") ? 2 : 1;
+        const contrattiDaAssegnare = Math.min(minimoContratti, max);
+        for (let i = 0; i < contrattiDaAssegnare && disponibiliConContratto.length > 0; i++) {
             disponibiliConContratto.sort((a, b) => contatoreTurni[a.id] - contatoreTurni[b.id]);
-            let sceltoContratto = disponibiliConContratto[0];
+            let sceltoContratto = disponibiliConContratto.shift();
             turno.push(sceltoContratto);
             contatoreTurni[sceltoContratto.id]++;
             disp = disp.filter(l => l.id !== sceltoContratto.id);
@@ -333,6 +335,9 @@ function trovaSoluzioneOttimale() {
         const info = bestPlan.calendario[g];
         const turno = info.turno;
         const disp = info.sostituti;
+        const contrattiAssegnati = turno.filter(l => l.contratto).length;
+        const minimoContrattiWeekend = (g === 'Sab' || g === 'Dom') ? Math.min(2, max) : 0;
+        const contrattiMancanti = Math.max(0, minimoContrattiWeekend - contrattiAssegnati);
 
         // Card format tags
         const assegnatiCardsHtml = turno.map(l => `
@@ -352,6 +357,9 @@ function trovaSoluzioneOttimale() {
 
         const vuoti = Math.max(0, max - turno.length);
         const alertHtml = Array.from({length: vuoti}).map(() => `<div class="bg-rose-50 text-rose-600 text-[10px] font-bold px-3 py-2 rounded-xl border border-rose-100 border-dashed whitespace-nowrap">⚠️ Manca 1 risorsa</div>`).join('');
+        const alertContrattoHtml = contrattiMancanti > 0
+            ? `<div class="bg-amber-50 text-amber-700 text-[10px] font-bold px-3 py-2 rounded-xl border border-amber-200 whitespace-nowrap">⚠️ Contratti insufficienti: ne mancano ${contrattiMancanti}</div>`
+            : '';
 
         // 1. Build Daily Card (Mobile)
         cardsHtml += `
@@ -363,6 +371,7 @@ function trovaSoluzioneOttimale() {
             <div class="p-4 flex flex-col gap-2 flex-grow">
                 ${assegnatiCardsHtml || '<span class="text-xs text-slate-400 italic">Nessun assegnato</span>'}
                 ${alertHtml}
+                ${alertContrattoHtml}
             </div>
             ${disp.length > 0 ? `<div class="bg-slate-50/50 px-4 py-3 border-t border-slate-100 text-xs text-slate-500"><span class="font-bold text-slate-400 uppercase tracking-wider text-[9px] block mb-1">In Panchina</span>${disp.map(l => l.nome).join(', ')}</div>` : ''}
         </div>`;
@@ -371,7 +380,7 @@ function trovaSoluzioneOttimale() {
         tableHtml += `
         <tr>
             <td class="p-5 font-bold text-slate-900 bg-slate-50/50">${g}</td>
-            <td class="p-5 flex flex-wrap gap-2">${assegnatiTableHtml + alertHtml}</td>
+            <td class="p-5 flex flex-wrap gap-2">${assegnatiTableHtml + alertHtml + alertContrattoHtml}</td>
             <td class="p-5 text-xs text-slate-400 font-semibold bg-slate-50/30 min-w-[150px]">${disp.map(l => l.nome).join(', ') || '—'}</td>
         </tr>`;
         
